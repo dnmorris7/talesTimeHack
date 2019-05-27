@@ -16,6 +16,7 @@ if not (A_IsAdmin or RegExMatch(full_command_line, " /restart(?!\S)"))
 }
 MsgBox A_IsAdmin: %A_IsAdmin%`nCommand line: %full_command_line%
 
+
 Xbutton1::
 hh := A_hour
 run *runas cmd.exe
@@ -33,6 +34,7 @@ Send exit{return}
 return
 
 Xbutton2::
+ensureService()
 resetClock()
 return
 
@@ -43,6 +45,12 @@ sleep 100
 Send w32tm /resync {return}
 sleep 100 
 Send exit{return}
+}
+
+ensureService(){
+Send w32tm /unregister {return}
+Send w32tm /register {return}
+Send net start w32tm {return}
 }
 
 MButton::
